@@ -47,4 +47,16 @@ public class VideoService {
     this.videoRepository.deleteById(id);
   }
 
+  public void favorite(Long id) {
+    Video video = this.getById(id);
+    video.setFavorite(true);
+    this.videoRepository.save(video);
+  }
+
+  public void unfavorite(Long id) {
+    Video video = this.getById(id);
+    video.setFavorite(false);
+    this.videoRepository.save(video);
+  }
+
 }

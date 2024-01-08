@@ -59,6 +59,8 @@ public class VideoController {
       return ResponseEntity.badRequest().body(violations);
     }
 
+    System.out.println(videoDTO);
+
     Video video = this.videoService.create(videoDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(video);
   }
@@ -84,6 +86,30 @@ public class VideoController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot remove resource in use.");
+    }
+  }
+
+  @PostMapping("/favorite/{id}")
+  public ResponseEntity<?> favorite(@PathVariable("id") Long id) {
+    try {
+      this.videoService.favorite(id);
+      return ResponseEntity.ok().build();
+    } catch (NotFoundException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+  }
+
+  @PostMapping("/unfavorite/{id}")
+  public ResponseEntity<?> unfavorite(@PathVariable("id") Long id) {
+    try {
+      this.videoService.unfavorite(id);
+      return ResponseEntity.ok().build();
+    } catch (NotFoundException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 

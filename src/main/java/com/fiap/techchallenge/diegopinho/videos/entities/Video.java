@@ -1,6 +1,6 @@
 package com.fiap.techchallenge.diegopinho.videos.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -25,17 +25,19 @@ public class Video {
   private String description;
   private String link;
   @JsonFormat(pattern = "dd-MM-yyyy")
-  private LocalDateTime publication;
+  private LocalDate publication;
+  private Boolean favorite;
 
   public Video() {
 
   }
 
-  public Video(String title, String description, String link, LocalDateTime publication) {
+  public Video(String title, String description, String link, LocalDate publication) {
     this.title = title;
     this.description = description;
     this.link = link;
     this.publication = publication;
+    this.favorite = false; // default
   }
 
   public Long getId() {
@@ -70,12 +72,20 @@ public class Video {
     this.link = link;
   }
 
-  public LocalDateTime getPublication() {
+  public LocalDate getPublication() {
     return publication;
   }
 
-  public void setPublication(LocalDateTime publication) {
+  public void setPublication(LocalDate publication) {
     this.publication = publication;
+  }
+
+  public Boolean getFavorite() {
+    return favorite;
+  }
+
+  public void setFavorite(Boolean favorite) {
+    this.favorite = favorite;
   }
 
 }
