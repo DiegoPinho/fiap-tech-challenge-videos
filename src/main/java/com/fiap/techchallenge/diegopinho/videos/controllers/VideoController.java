@@ -59,7 +59,7 @@ public class VideoController {
       return ResponseEntity.badRequest().body(violations);
     }
 
-    System.out.println(videoDTO);
+    // System.out.println(videoDTO);
 
     Video video = this.videoService.create(videoDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(video);

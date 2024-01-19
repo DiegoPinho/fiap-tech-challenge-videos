@@ -13,6 +13,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 public class VideoCriteria {
+
   private String title;
   private LocalDateTime publication;
 

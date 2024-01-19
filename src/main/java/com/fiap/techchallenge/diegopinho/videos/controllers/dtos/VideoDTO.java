@@ -1,8 +1,6 @@
 package com.fiap.techchallenge.diegopinho.videos.controllers.dtos;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
