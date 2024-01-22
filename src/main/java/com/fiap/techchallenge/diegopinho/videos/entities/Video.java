@@ -30,6 +30,7 @@ public class Video {
   @JsonFormat(pattern = "dd-MM-yyyy")
   private LocalDate publication;
   private Boolean favorite;
+  private Integer times = 0;
 
   @ManyToOne
   @JoinColumn(name = "category_id")
@@ -102,6 +103,14 @@ public class Video {
 
   public void setCategory(Category category) {
     this.category = category;
+  }
+
+  public Integer getTimes() {
+    return times;
+  }
+
+  public void setTimes(Integer times) {
+    this.times = times;
   }
 
 }

@@ -71,4 +71,10 @@ public class VideoService {
     this.videoRepository.save(video);
   }
 
+  public Video playVideo(Long id) {
+    Video video = this.getById(id);
+    video.setTimes(video.getTimes() + 1);
+    return this.videoRepository.save(video);
+  }
+
 }

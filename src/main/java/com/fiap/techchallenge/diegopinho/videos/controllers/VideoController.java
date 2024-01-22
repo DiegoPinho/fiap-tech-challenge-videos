@@ -90,6 +90,18 @@ public class VideoController {
     }
   }
 
+  @GetMapping("/play/{id}")
+  public ResponseEntity<?> playVideo(@PathVariable("id") Long id) {
+    try {
+      Video video = this.videoService.playVideo(id);
+      return ResponseEntity.ok().body("You're now watching... " + video.getTitle());
+    } catch (NotFoundException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+  }
+
   @PostMapping("/favorite/{id}")
   public ResponseEntity<?> favorite(@PathVariable("id") Long id) {
     try {
