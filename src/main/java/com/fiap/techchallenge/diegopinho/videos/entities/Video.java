@@ -3,6 +3,7 @@ package com.fiap.techchallenge.diegopinho.videos.entities;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ public class Video {
 
   @ManyToOne
   @JoinColumn(name = "category_id")
+  @JsonManagedReference
   private Category category;
 
   public Video() {

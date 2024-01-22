@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.fiap.techchallenge.diegopinho.videos.controllers.criterias.VideoCriteria;
 import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.VideoDTO;
+import com.fiap.techchallenge.diegopinho.videos.entities.Category;
 import com.fiap.techchallenge.diegopinho.videos.entities.Video;
 import com.fiap.techchallenge.diegopinho.videos.exceptions.NotFoundException;
 import com.fiap.techchallenge.diegopinho.videos.repositories.VideoRepository;
@@ -17,6 +18,9 @@ public class VideoService {
 
   @Autowired
   private VideoRepository videoRepository;
+
+  @Autowired
+  private CategoryService categoryService;
 
   public List<Video> getAll(VideoCriteria criteria) {
     Specification<Video> specification = criteria.toSpecification();
@@ -31,14 +35,20 @@ public class VideoService {
 
   public Video create(VideoDTO videoDTO) {
     Video video = videoDTO.toVideo();
+    Category category = this.categoryService.getById(videoDTO.getCategoryId());
+    video.setCategory(category);
+
     return this.videoRepository.save(video);
   }
 
   public void update(Long id, VideoDTO videoDTO) {
     this.getById(id); // checks if exists
+    Category category = this.categoryService.getById(videoDTO.getCategoryId()); // checks if exists
 
     Video video = videoDTO.toVideo();
     video.setId(id);
+    video.setCategory(category);
+
     this.videoRepository.save(video);
   }
 
@@ -50,12 +60,14 @@ public class VideoService {
   public void favorite(Long id) {
     Video video = this.getById(id);
     video.setFavorite(true);
+
     this.videoRepository.save(video);
   }
 
   public void unfavorite(Long id) {
     Video video = this.getById(id);
     video.setFavorite(false);
+
     this.videoRepository.save(video);
   }
 

@@ -7,10 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fiap.techchallenge.diegopinho.videos.entities.Video;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class VideoDTO {
 
-  private static final String VIDEO_DATE_PATTERN = "dd-MM-yyyy";
+  // private static final String VIDEO_DATE_PATTERN = "dd-MM-yyyy";
 
   @JsonProperty
   @NotBlank(message = "title is required and cannot be blank")
@@ -28,6 +29,10 @@ public class VideoDTO {
   @JsonFormat(pattern = "dd-MM-yyyy")
   private LocalDate publication;
 
+  @JsonProperty
+  @NotNull(message = "CategoryId is required and cannot be null")
+  private Long categoryId;
+
   public Video toVideo() {
     // DateTimeFormatter formatter =
     // DateTimeFormatter.ofPattern(VIDEO_DATE_PATTERN);
@@ -36,4 +41,9 @@ public class VideoDTO {
 
     return new Video(this.title, this.description, this.link, this.publication);
   }
+
+  public Long getCategoryId() {
+    return categoryId;
+  }
+
 }

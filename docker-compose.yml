@@ -3,7 +3,7 @@ services:
     image: postgres
     container_name: my-postgres
     environment:
-      POSTGRES_DB: videos
+      POSTGRES_DB: fiap_videos
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
@@ -19,7 +19,7 @@ services:
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/videos
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/fiap_videos
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 

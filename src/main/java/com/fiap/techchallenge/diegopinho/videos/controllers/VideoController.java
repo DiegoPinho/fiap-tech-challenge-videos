@@ -44,6 +44,7 @@ public class VideoController {
   public ResponseEntity<?> getById(@PathVariable("id") Long id) {
     try {
       Video video = this.videoService.getById(id);
+      System.out.println(video);
       return ResponseEntity.ok().body(video);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -42,4 +42,17 @@ public class CategoryService {
     return this.categoryRepository.save(category);
   }
 
+  public void update(Long id, CategoryDTO categoryDTO) {
+    this.getById(id); // checks
+    Category category = categoryDTO.toCategory();
+    category.setId(id);
+
+    this.categoryRepository.save(category);
+  }
+
+  public void delete(Long id) {
+    this.getById(id); // checks if exists
+    this.categoryRepository.deleteById(id);
+  }
+
 }

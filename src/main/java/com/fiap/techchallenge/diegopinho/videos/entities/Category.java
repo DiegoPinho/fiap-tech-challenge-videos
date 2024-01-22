@@ -2,6 +2,8 @@ package com.fiap.techchallenge.diegopinho.videos.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +30,7 @@ public class Category {
   private String description;
 
   @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+  @JsonBackReference
   private List<Video> videos;
 
   public Category() {
