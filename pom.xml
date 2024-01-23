@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fiap.techchallenge.diegopinho</groupId>
-	<artifactId>movies</artifactId>
+	<artifactId>fiap-videos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>movies</name>
-	<description>Movies- Tech Challenge Fiap</description>
+	<name>fiap-videos</name>
+	<description>Videos - Tech Challenge Fiap</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
