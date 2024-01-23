@@ -6,6 +6,7 @@ import com.fiap.techchallenge.diegopinho.videos.controllers.criterias.VideoCrite
 import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.VideoDTO;
 import com.fiap.techchallenge.diegopinho.videos.entities.Video;
 import com.fiap.techchallenge.diegopinho.videos.exceptions.NotFoundException;
+import com.fiap.techchallenge.diegopinho.videos.services.RecommendationService;
 import com.fiap.techchallenge.diegopinho.videos.services.VideoService;
 import com.fiap.techchallenge.diegopinho.videos.utils.DTOValidator;
 
@@ -30,6 +31,9 @@ public class VideoController {
 
   @Autowired
   private VideoService videoService;
+
+  @Autowired
+  private RecommendationService recommendationService;
 
   @Autowired
   private DTOValidator validator;
@@ -88,6 +92,12 @@ public class VideoController {
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot remove resource in use.");
     }
+  }
+
+  @GetMapping("/recommend")
+  public ResponseEntity<?> recommendVideos() {
+    List<Video> videos = recommendationService.getRecommendationsBasedOnFavorites();
+    return ResponseEntity.ok().body(videos);
   }
 
   @GetMapping("/play/{id}")

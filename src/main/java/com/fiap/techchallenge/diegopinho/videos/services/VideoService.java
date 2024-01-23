@@ -77,4 +77,8 @@ public class VideoService {
     return this.videoRepository.save(video);
   }
 
+  public List<Video> getFavoriteVideos() {
+    return videoRepository.findByFavoriteTrue();
+  }
+
 }
