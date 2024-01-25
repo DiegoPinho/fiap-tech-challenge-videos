@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.fiap.techchallenge.diegopinho.videos.controllers.criterias.VideoCriteria;
+import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.StatsDTO;
 import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.VideoDTO;
 import com.fiap.techchallenge.diegopinho.videos.entities.Category;
 import com.fiap.techchallenge.diegopinho.videos.entities.Video;
@@ -79,6 +80,14 @@ public class VideoService {
 
   public List<Video> getFavoriteVideos() {
     return videoRepository.findByFavoriteTrue();
+  }
+
+  public StatsDTO getStatisticsFromVideos() {
+    long totalVideos = this.videoRepository.count();
+    int totalFavoriteVideos = this.videoRepository.findByFavoriteTrue().size();
+    Double averageTimes = this.videoRepository.getAverageTime();
+
+    return new StatsDTO(totalVideos, totalFavoriteVideos, averageTimes);
   }
 
 }
