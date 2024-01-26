@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,6 +20,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" })
 @ToString(of = { "id" }, callSuper = true)
 @Entity(name = "categories")
+@Builder(toBuilder = true)
 public class Category {
 
   @Id
@@ -35,6 +37,13 @@ public class Category {
 
   public Category() {
     super();
+  }
+
+  public Category(Long id, String name, String description, List<Video> videos) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.videos = videos;
   }
 
   public Category(String name, String description) {
