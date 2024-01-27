@@ -14,14 +14,17 @@ import com.fiap.techchallenge.diegopinho.videos.entities.Video;
 import com.fiap.techchallenge.diegopinho.videos.exceptions.NotFoundException;
 import com.fiap.techchallenge.diegopinho.videos.repositories.VideoRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class VideoService {
 
-  @Autowired
-  private VideoRepository videoRepository;
+  // @Autowired
+  private final VideoRepository videoRepository;
 
-  @Autowired
-  private CategoryService categoryService;
+  // @Autowired
+  private final CategoryService categoryService;
 
   public List<Video> getAll(VideoCriteria criteria) {
     Specification<Video> specification = criteria.toSpecification();
@@ -42,7 +45,7 @@ public class VideoService {
     return this.videoRepository.save(video);
   }
 
-  public void update(Long id, VideoDTO videoDTO) {
+  public Video update(Long id, VideoDTO videoDTO) {
     this.getById(id); // checks if exists
     Category category = this.categoryService.getById(videoDTO.getCategoryId()); // checks if exists
 
@@ -50,7 +53,7 @@ public class VideoService {
     video.setId(id);
     video.setCategory(category);
 
-    this.videoRepository.save(video);
+    return this.videoRepository.save(video);
   }
 
   public void delete(Long id) {

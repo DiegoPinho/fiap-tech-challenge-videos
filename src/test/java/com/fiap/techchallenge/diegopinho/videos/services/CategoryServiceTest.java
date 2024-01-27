@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -169,7 +168,7 @@ public class CategoryServiceTest {
   public class RemoveCategory {
 
     @Test
-    void devePermitirApagarMensagem() {
+    void shouldRemoveCategory() {
       Long id = new Random().nextLong();
 
       var category = CategoryHelper.generateCategory();
@@ -179,10 +178,24 @@ public class CategoryServiceTest {
 
       categoryService.delete(id);
 
-      verify(categoryRepository, times(1)).findById(any(Long.class));
-      verify(categoryRepository, times(1)).delete(any(Category.class));
+      verify(categoryRepository, times(1)).findById(id);
+      verify(categoryRepository, times(1)).deleteById(id);
     }
 
+    @Test
+    public void shouldReturnErrorIfIdDoesNotExist() {
+      Long id = new Random().nextLong();
+
+      var oldCategory = CategoryHelper.generateCategory();
+      oldCategory.setId(id);
+
+      when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+      assertThatThrownBy(() -> categoryService.delete(id))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage("Category Not Found!");
+      verify(categoryRepository, never()).delete(any(Category.class));
+    }
   }
 
 }

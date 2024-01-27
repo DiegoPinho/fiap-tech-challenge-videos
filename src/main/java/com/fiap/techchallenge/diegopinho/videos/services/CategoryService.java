@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryService {
 
+  // @Autowired
   private final CategoryRepository categoryRepository;
 
   public List<Category> getAll(CategoryCriteria criteria) {
