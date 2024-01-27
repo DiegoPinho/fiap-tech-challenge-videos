@@ -158,7 +158,7 @@
 		</dependency>
 	</dependencies>
 
-	<build>
+	<!-- <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -173,6 +173,138 @@
 				</configuration>
 			</plugin>
 		</plugins>
+	</build> -->
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+					<excludes>
+						<exclude>**/bdd/**</exclude>
+					</excludes>
+					<properties>
+						<configurationParameters>
+							junit.jupiter.displayname.generator.default.remove-parent=true
+						</configurationParameters>
+					</properties>
+					<systemPropertyVariables>
+						<junit.jupiter.extensions.autodetection.enabled>true
+						</junit.jupiter.extensions.autodetection.enabled>
+						<allure.results.directory>${project.build.directory}/allure-results
+						</allure.results.directory>
+					</systemPropertyVariables>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjweaver</artifactId>
+						<version>${aspectj.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+					<includes>
+						<include>**/*IT.java</include>
+					</includes>
+					<skipTests>${skipIntegrationTests}</skipTests>
+					<rerunFailingTestsCount>2</rerunFailingTestsCount>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.qameta.allure</groupId>
+				<artifactId>allure-maven</artifactId>
+				<version>2.23.0</version>
+				<configuration>
+					<reportVersion>2.4.1</reportVersion>
+					<resultsDirectory>${project.build.directory}/allure-results/</resultsDirectory>
+					<reportDirectory>${project.build.directory}/allure-report</reportDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.1.2</version>
+						<configuration>
+							<includes combine.self="override">
+								<include>**/*IT.java</include>
+							</includes>
+							<excludes combine.self="override">
+								<exclude>**/*Test.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>system-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.1.2</version>
+						<configuration>
+							<includes combine.self="override">
+								<include>**/CucumberTest.java</include>
+							</includes>
+							<excludes combine.self="override">
+							</excludes>
+							<properties>
+								<configurationParameters>
+									cucumber.junit-platform.naming-strategy=long
+								</configurationParameters>
+							</properties>
+						</configuration>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>performance-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.gatling</groupId>
+						<artifactId>gatling-maven-plugin</artifactId>
+						<version>4.3.7</version>
+						<configuration>
+							<simulationClass>org.example.performance.ApiPerformanceSimulation</simulationClass>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

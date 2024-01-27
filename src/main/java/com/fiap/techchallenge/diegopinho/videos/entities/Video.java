@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -19,6 +20,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" })
 @ToString(of = { "id" }, callSuper = true)
 @Entity(name = "videos")
+@Builder(toBuilder = true)
 public class Video {
 
   @Id
@@ -39,6 +41,18 @@ public class Video {
 
   public Video() {
     super();
+  }
+
+  public Video(Long id, String title, String description, String link, LocalDate publication, Boolean favorite,
+      Integer times, Category category) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.link = link;
+    this.publication = publication;
+    this.favorite = favorite;
+    this.times = times;
+    this.category = category;
   }
 
   public Video(String title, String description, String link, LocalDate publication) {
