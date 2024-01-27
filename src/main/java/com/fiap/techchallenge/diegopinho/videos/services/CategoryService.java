@@ -14,11 +14,13 @@ import com.fiap.techchallenge.diegopinho.videos.exceptions.ConflictException;
 import com.fiap.techchallenge.diegopinho.videos.exceptions.NotFoundException;
 import com.fiap.techchallenge.diegopinho.videos.repositories.CategoryRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-  @Autowired
-  private CategoryRepository categoryRepository;
+  private final CategoryRepository categoryRepository;
 
   public List<Category> getAll(CategoryCriteria criteria) {
     Specification<Category> specification = criteria.toSpecification();
@@ -42,12 +44,12 @@ public class CategoryService {
     return this.categoryRepository.save(category);
   }
 
-  public void update(Long id, CategoryDTO categoryDTO) {
+  public Category update(Long id, CategoryDTO categoryDTO) {
     this.getById(id); // checks
     Category category = categoryDTO.toCategory();
     category.setId(id);
 
-    this.categoryRepository.save(category);
+    return this.categoryRepository.save(category);
   }
 
   public void delete(Long id) {
