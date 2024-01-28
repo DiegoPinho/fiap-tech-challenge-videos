@@ -48,7 +48,6 @@ public class VideoController {
   public ResponseEntity<?> getById(@PathVariable("id") Long id) {
     try {
       Video video = this.videoService.getById(id);
-      System.out.println(video);
       return ResponseEntity.ok().body(video);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -64,17 +63,21 @@ public class VideoController {
       return ResponseEntity.badRequest().body(violations);
     }
 
-    // System.out.println(videoDTO);
-
-    Video video = this.videoService.create(videoDTO);
-    return ResponseEntity.status(HttpStatus.CREATED).body(video);
+    try {
+      Video video = this.videoService.create(videoDTO);
+      return ResponseEntity.status(HttpStatus.CREATED).body(video);
+    } catch (NotFoundException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<?> update(@RequestBody VideoDTO videoDTO, @PathVariable("id") Long id) {
     try {
-      this.videoService.update(id, videoDTO);
-      return ResponseEntity.ok().build();
+      Video video = this.videoService.update(id, videoDTO);
+      return ResponseEntity.ok().body(video);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     } catch (Exception e) {

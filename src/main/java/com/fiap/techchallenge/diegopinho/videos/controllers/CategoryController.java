@@ -23,15 +23,18 @@ import com.fiap.techchallenge.diegopinho.videos.exceptions.NotFoundException;
 import com.fiap.techchallenge.diegopinho.videos.services.CategoryService;
 import com.fiap.techchallenge.diegopinho.videos.utils.DTOValidator;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/categories")
+@RequiredArgsConstructor
 public class CategoryController {
 
-  @Autowired
-  private CategoryService categoryService;
+  // @Autowired
+  private final CategoryService categoryService;
 
-  @Autowired
-  private DTOValidator validator;
+  // @Autowired
+  private final DTOValidator validator;
 
   @GetMapping
   public ResponseEntity<?> getAll(CategoryCriteria criteria) {
@@ -71,8 +74,8 @@ public class CategoryController {
   @PutMapping("/{id}")
   public ResponseEntity<?> update(@RequestBody CategoryDTO categoryDTO, @PathVariable("id") Long id) {
     try {
-      this.categoryService.update(id, categoryDTO);
-      return ResponseEntity.ok().build();
+      Category category = this.categoryService.update(id, categoryDTO);
+      return ResponseEntity.ok().body(category);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     } catch (Exception e) {

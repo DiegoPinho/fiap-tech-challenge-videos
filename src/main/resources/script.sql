@@ -14,5 +14,6 @@ CREATE TABLE videos (
   publication TIMESTAMP,
   favorite BOOLEAN DEFAULT FALSE,
   category_id INTEGER,
+  times INTEGER,
   FOREIGN KEY (category_id) REFERENCES categories(id)
 );

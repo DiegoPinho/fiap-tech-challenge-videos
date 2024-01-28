@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "title": "Video",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "link": {
+      "type": "string"
+    },
+    "publication": {
+      "type": "string"
+    },
+    "favorite": {
+      "type": "boolean"
+    },
+    "category": {
+      "type": "object"
+    },
+    "times": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "description",
+    "link"
+  ]
+}
