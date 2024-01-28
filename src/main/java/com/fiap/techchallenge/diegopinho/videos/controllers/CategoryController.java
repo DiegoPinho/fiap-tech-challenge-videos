@@ -83,8 +83,6 @@ public class CategoryController {
       return ResponseEntity.ok().build();
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot remove category in use.");
     }
   }
 
