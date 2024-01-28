@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.fiap.techchallenge.diegopinho.videos.entities.Category;
 import com.fiap.techchallenge.diegopinho.videos.entities.Video;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +25,7 @@ public class RecommendationService {
   // @Autowired
   private final VideoService videoService;
 
+  @Transactional
   public List<Video> getRecommendationsBasedOnFavorites() {
     List<Video> favoriteVideos = this.videoService.getFavoriteVideos();
     Map<Category, Long> categoryFrequency = this.countCategoryFrequency(favoriteVideos);

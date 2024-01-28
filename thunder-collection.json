@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
-    "collectionName": "fiap | tech-challenge-3 | videos",
-    "dateExported": "2024-01-28T15:58:42.004Z",
+    "collectionName": "fiap videos",
+    "dateExported": "2024-01-28T17:27:20.958Z",
     "version": "1.1",
     "folders": [
         {
@@ -17,6 +17,13 @@
             "containerId": "",
             "created": "2024-01-28T15:54:33.539Z",
             "sortNum": 20000
+        },
+        {
+            "_id": "edb03e5d-7b2b-4263-b01e-bd9abedaff28",
+            "name": "/stats",
+            "containerId": "",
+            "created": "2024-01-28T17:26:37.817Z",
+            "sortNum": 30000
         }
     ],
     "requests": [
@@ -62,7 +69,7 @@
             "method": "GET",
             "sortNum": 30000,
             "created": "2024-01-28T15:54:33.538Z",
-            "modified": "2024-01-28T15:54:33.538Z",
+            "modified": "2024-01-28T16:06:06.213Z",
             "headers": [],
             "params": [],
             "tests": []
@@ -194,11 +201,11 @@
             "colId": "a59d888d-ceb6-4671-b842-cb84cadacf54",
             "containerId": "5a61571e-7e02-45df-9f99-536207f4af89",
             "name": "/categories/id",
-            "url": "http://localhost:8081/categories/2",
+            "url": "http://localhost:8081/categories/1",
             "method": "GET",
             "sortNum": 100000,
             "created": "2024-01-28T15:54:33.548Z",
-            "modified": "2024-01-28T15:54:33.548Z",
+            "modified": "2024-01-28T15:59:09.835Z",
             "headers": [],
             "params": [],
             "tests": []
@@ -246,6 +253,20 @@
             "sortNum": 130000,
             "created": "2024-01-28T15:57:47.706Z",
             "modified": "2024-01-28T15:58:09.325Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "17004919-a3f8-4315-bc28-3f1b5da60b9f",
+            "colId": "a59d888d-ceb6-4671-b842-cb84cadacf54",
+            "containerId": "edb03e5d-7b2b-4263-b01e-bd9abedaff28",
+            "name": "GET /stats",
+            "url": "http://localhost:8081/stats",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2024-01-28T17:26:44.722Z",
+            "modified": "2024-01-28T17:26:57.274Z",
             "headers": [],
             "params": [],
             "tests": []

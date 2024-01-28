@@ -23,67 +23,74 @@ import com.fiap.techchallenge.diegopinho.videos.services.CategoryService;
 import com.fiap.techchallenge.diegopinho.videos.utils.DTOValidator;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
-  // @Autowired
   private final CategoryService categoryService;
-
-  // @Autowired
   private final DTOValidator validator;
 
   @GetMapping
-  public ResponseEntity<?> getAll(CategoryCriteria criteria) {
-    List<Category> categories = this.categoryService.getAll(criteria);
-    return ResponseEntity.ok().body(categories);
+  public Mono<ResponseEntity<?>> getAll(CategoryCriteria criteria) {
+    return Mono.fromSupplier(() -> {
+      List<Category> categories = this.categoryService.getAll(criteria);
+      return ResponseEntity.ok().body(categories);
+    });
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-    try {
-      Category category = this.categoryService.getById(id);
-      return ResponseEntity.ok().body(category);
-    } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
+  public Mono<ResponseEntity<?>> getById(@PathVariable("id") Long id) {
+    return Mono.fromSupplier(() -> {
+      try {
+        Category category = this.categoryService.getById(id);
+        return ResponseEntity.ok().body(category);
+      } catch (NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      }
+    });
   }
 
   @PostMapping
-  public ResponseEntity<?> create(@RequestBody CategoryDTO categoryDTO) {
-    Map<Object, Object> violations = validator.check(categoryDTO);
-    if (!violations.isEmpty()) {
-      return ResponseEntity.badRequest().body(violations);
-    }
+  public Mono<ResponseEntity<?>> create(@RequestBody CategoryDTO categoryDTO) {
+    return Mono.fromSupplier(() -> {
+      Map<Object, Object> violations = validator.check(categoryDTO);
+      if (!violations.isEmpty()) {
+        return ResponseEntity.badRequest().body(violations);
+      }
 
-    try {
-      Category category = this.categoryService.create(categoryDTO);
-      return ResponseEntity.status(HttpStatus.CREATED).body(category);
-    } catch (ConflictException e) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-    }
+      try {
+        Category category = this.categoryService.create(categoryDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(category);
+      } catch (ConflictException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+      }
+    });
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> update(@RequestBody CategoryDTO categoryDTO, @PathVariable("id") Long id) {
-    try {
-      Category category = this.categoryService.update(id, categoryDTO);
-      return ResponseEntity.ok().body(category);
-    } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
+  public Mono<ResponseEntity<?>> update(@RequestBody CategoryDTO categoryDTO, @PathVariable("id") Long id) {
+    return Mono.fromSupplier(() -> {
+      try {
+        Category category = this.categoryService.update(id, categoryDTO);
+        return ResponseEntity.ok().body(category);
+      } catch (NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      }
+    });
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-    try {
-      this.categoryService.delete(id);
-      return ResponseEntity.ok().build();
-    } catch (NotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
+  public Mono<ResponseEntity<?>> delete(@PathVariable("id") Long id) {
+    return Mono.fromSupplier(() -> {
+      try {
+        this.categoryService.delete(id);
+        return ResponseEntity.ok().build();
+      } catch (NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      }
+    });
   }
-
 }

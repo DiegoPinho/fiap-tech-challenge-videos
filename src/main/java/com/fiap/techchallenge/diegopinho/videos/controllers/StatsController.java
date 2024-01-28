@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.StatsDTO;
 import com.fiap.techchallenge.diegopinho.videos.services.VideoService;
 
+import reactor.core.publisher.Mono;
+
 @RestController
 @RequestMapping("/stats")
 public class StatsController {
@@ -17,9 +19,8 @@ public class StatsController {
   private VideoService videoService;
 
   @GetMapping
-  public ResponseEntity<StatsDTO> getStatistics() {
-    StatsDTO statisticsFromVideos = this.videoService.getStatisticsFromVideos();
-    return ResponseEntity.ok().body(statisticsFromVideos);
+  public Mono<ResponseEntity<StatsDTO>> getStatistics() {
+    return Mono.fromSupplier(() -> ResponseEntity.ok().body(videoService.getStatisticsFromVideos()));
   }
 
 }
