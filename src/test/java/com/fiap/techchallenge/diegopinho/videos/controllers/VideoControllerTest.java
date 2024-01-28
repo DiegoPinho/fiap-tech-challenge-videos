@@ -5,8 +5,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasKey;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-import java.util.Random;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.fiap.techchallenge.diegopinho.videos.entities.Category;
-import com.fiap.techchallenge.diegopinho.videos.utils.CategoryHelper;
 import com.fiap.techchallenge.diegopinho.videos.utils.VideoHelper;
 
 import io.qameta.allure.restassured.AllureRestAssured;
@@ -35,8 +32,6 @@ public class VideoControllerTest {
   public void setup() {
     RestAssured.port = port;
     RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    // RestAssured.filters(new AllureRestAssured()); // desta forma como estamos
-    // utilizando nested class gera informação duplicada
   }
 
   @Test
