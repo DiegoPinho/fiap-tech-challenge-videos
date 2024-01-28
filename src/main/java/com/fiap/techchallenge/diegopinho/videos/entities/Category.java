@@ -20,7 +20,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = { "id" })
 @ToString(of = { "id" }, callSuper = true)
 @Entity(name = "categories")
-@Builder(toBuilder = true)
+@Builder()
 public class Category {
 
   @Id

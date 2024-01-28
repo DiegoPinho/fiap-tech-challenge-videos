@@ -41,12 +41,4 @@ public class VideoCriteria {
     this.title = title;
   }
 
-  public LocalDateTime getPublication() {
-    return publication;
-  }
-
-  public void setPublication(LocalDateTime publication) {
-    this.publication = publication;
-  }
-
 }

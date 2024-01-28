@@ -16,6 +16,7 @@ public class VideoHelper {
         .favorite(false)
         .publication(LocalDate.now())
         .category(category)
+        .times(0)
         .build();
   }
 

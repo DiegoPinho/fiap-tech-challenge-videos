@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.fiap.techchallenge.diegopinho.videos.controllers.criterias.VideoCriteria;
+import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.StatsDTO;
 import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.VideoDTO;
 import com.fiap.techchallenge.diegopinho.videos.entities.Category;
 import com.fiap.techchallenge.diegopinho.videos.entities.Video;
@@ -82,7 +84,13 @@ public class VideoServiceTest {
     @Test
     public void shouldReturnVideo() {
       Long id = new Random().nextLong();
-      Video video = VideoHelper.generateVideo(new Category());
+      Video video = new Video();
+      video.setId(id);
+      video.setTitle("Title");
+      video.setDescription("Description");
+      video.setLink("Link");
+      video.setPublication(LocalDate.now());
+      video.toString();
       when(videoRepository.findById(id)).thenReturn(Optional.of(video));
 
       Video videoFromDb = videoService.getById(id);
@@ -210,6 +218,103 @@ public class VideoServiceTest {
           .hasMessage("Video Not Found!");
 
       verify(videoRepository, never()).delete(any(Video.class));
+    }
+  }
+
+  @Nested
+  public class FavoriteVideo {
+
+    @Test
+    public void shouldFavoriteAVideo() {
+      Long id = new Random().nextLong();
+
+      Category category = CategoryHelper.generateCategory();
+      Video video = VideoHelper.generateVideo(category);
+      video.setId(id);
+
+      when(videoRepository.findById(any(Long.class))).thenReturn(Optional.of(video));
+      when(videoRepository.save(any(Video.class))).thenAnswer(i -> i.getArgument(0));
+
+      Video updatedVideo = videoService.favorite(id);
+      assertThat(updatedVideo).isInstanceOf(Video.class).isNotNull();
+      assertThat(updatedVideo.getId()).isEqualTo(id);
+      assertThat(updatedVideo.getFavorite()).isEqualTo(true);
+    }
+
+    @Test
+    public void shouldUnfavoriteAVideo() {
+      Long id = new Random().nextLong();
+
+      Category category = CategoryHelper.generateCategory();
+      Video video = VideoHelper.generateVideo(category);
+      video.setId(id);
+      video.setFavorite(true);
+
+      when(videoRepository.findById(any(Long.class))).thenReturn(Optional.of(video));
+      when(videoRepository.save(any(Video.class))).thenAnswer(i -> i.getArgument(0));
+
+      Video updatedVideo = videoService.unfavorite(id);
+      assertThat(updatedVideo).isInstanceOf(Video.class).isNotNull();
+      assertThat(updatedVideo.getId()).isEqualTo(id);
+      assertThat(updatedVideo.getFavorite()).isEqualTo(false);
+    }
+
+  }
+
+  @Nested
+  public class PlayVideo {
+
+    @Test
+    public void shouldPlayVideo() {
+      Long id = new Random().nextLong();
+
+      Category category = CategoryHelper.generateCategory();
+      Video video = VideoHelper.generateVideo(category);
+      video.setId(id);
+      video.setTimes(0);
+
+      when(videoRepository.findById(any(Long.class))).thenReturn(Optional.of(video));
+      when(videoRepository.save(any(Video.class))).thenAnswer(i -> i.getArgument(0));
+
+      Video playedVideo = videoService.playVideo(id);
+      assertThat(playedVideo).isInstanceOf(Video.class).isNotNull();
+      assertThat(playedVideo.getId()).isEqualTo(id);
+      assertThat(playedVideo.getTimes()).isEqualTo(1);
+    }
+
+  }
+
+  @Nested
+  public class VideoStats {
+
+    @Test
+    public void shouldGetStatusFromVideos() {
+      Long id = new Random().nextLong();
+
+      Category category = CategoryHelper.generateCategory();
+
+      Video video = VideoHelper.generateVideo(category);
+      video.setId(id);
+      video.setTimes(2);
+      video.setFavorite(true);
+
+      Video video2 = VideoHelper.generateVideo(category);
+      video.setId(id);
+      video.setTimes(4);
+      video2.setFavorite(true);
+
+      List<Video> videos = Arrays.asList(video, video2);
+      double avg = (double) (video.getTimes() + video.getTimes()) / 2;
+
+      when(videoRepository.count()).thenReturn(2L);
+      when(videoRepository.findByFavoriteTrue()).thenReturn(videos);
+      when(videoRepository.getAverageTime()).thenReturn(avg);
+
+      StatsDTO stats = videoService.getStatisticsFromVideos();
+      assertThat(stats).isInstanceOf(StatsDTO.class).isNotNull();
+      assertThat(stats.getTotalVideos()).isEqualTo(videos.size());
+      assertThat(stats.getAverageTimes()).isEqualTo(avg);
+      assertThat(stats.getTotalFavoriteVideos()).isEqualTo(videos.size());
     }
 
   }

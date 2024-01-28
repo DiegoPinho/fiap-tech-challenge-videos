@@ -51,8 +51,6 @@ public class VideoController {
       return ResponseEntity.ok().body(video);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 
@@ -68,8 +66,6 @@ public class VideoController {
       return ResponseEntity.status(HttpStatus.CREATED).body(video);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 
@@ -80,8 +76,6 @@ public class VideoController {
       return ResponseEntity.ok().body(video);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 
@@ -92,8 +86,6 @@ public class VideoController {
       return ResponseEntity.ok().build();
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cannot remove resource in use.");
     }
   }
 
@@ -110,8 +102,6 @@ public class VideoController {
       return ResponseEntity.ok().body("You're now watching... " + video.getTitle());
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 
@@ -122,8 +112,6 @@ public class VideoController {
       return ResponseEntity.ok().build();
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 
@@ -134,8 +122,6 @@ public class VideoController {
       return ResponseEntity.ok().build();
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 

@@ -48,8 +48,6 @@ public class CategoryController {
       return ResponseEntity.ok().body(category);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 
@@ -65,8 +63,6 @@ public class CategoryController {
       return ResponseEntity.status(HttpStatus.CREATED).body(category);
     } catch (ConflictException e) {
       return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 
@@ -77,8 +73,6 @@ public class CategoryController {
       return ResponseEntity.ok().body(category);
     } catch (NotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
   }
 

@@ -3,6 +3,7 @@ package com.fiap.techchallenge.diegopinho.videos.controllers;
 import static org.hamcrest.Matchers.equalTo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.hasSize;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 import java.util.Random;
@@ -40,7 +41,6 @@ public class CategoryControllerTest {
   @Test
   public void shouldCreateACategory() {
     var dto = CategoryHelper.generateCategoryDTO();
-
     given()
         .filter(new AllureRestAssured())
         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -53,6 +53,22 @@ public class CategoryControllerTest {
         .body("$", hasKey("description"))
         .body("name", equalTo(dto.getName()))
         .body("description", equalTo(dto.getDescription()));
+  }
+
+  @Test
+  @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  public void shouldNotCreateDuplicatedCategory() {
+    var dto = CategoryHelper.generateCategoryDTO();
+    dto.setName("name");
+
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .body(dto)
+        .when()
+        .post("/categories")
+        .then()
+        .statusCode(HttpStatus.CONFLICT.value());
   }
 
   @Test
@@ -87,6 +103,19 @@ public class CategoryControllerTest {
 
   @Test
   @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  public void shouldReturnAllCategories() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/categories")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .body("$", hasSize(equalTo(1)));
+  }
+
+  @Test
+  @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
   public void shouldReturnACategory() {
     given()
         .filter(new AllureRestAssured())
@@ -96,6 +125,17 @@ public class CategoryControllerTest {
         .then()
         .statusCode(HttpStatus.OK.value())
         .body(matchesJsonSchemaInClasspath("./schemas/CategorySchema.json"));
+  }
+
+  @Test
+  public void shouldUseFilter() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/categories?name=name")
+        .then()
+        .statusCode(HttpStatus.OK.value());
   }
 
   @Test

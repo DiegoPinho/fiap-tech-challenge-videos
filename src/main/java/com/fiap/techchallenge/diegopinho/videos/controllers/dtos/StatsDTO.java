@@ -15,24 +15,12 @@ public class StatsDTO {
     return totalVideos;
   }
 
-  public void setTotalVideos(long totalVideos) {
-    this.totalVideos = totalVideos;
-  }
-
   public int getTotalFavoriteVideos() {
     return totalFavoriteVideos;
   }
 
-  public void setTotalFavoriteVideos(int totalFavoriteVideos) {
-    this.totalFavoriteVideos = totalFavoriteVideos;
-  }
-
   public Double getAverageTimes() {
     return averageTimes;
-  }
-
-  public void setAverageTimes(Double averageTimes) {
-    this.averageTimes = averageTimes;
   }
 
 }

@@ -3,6 +3,10 @@ package com.fiap.techchallenge.diegopinho.videos.controllers;
 import static org.hamcrest.Matchers.equalTo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.hasSize;
+
+import java.util.Random;
+
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -99,6 +103,44 @@ public class VideoControllerTest {
   }
 
   @Test
+  public void shouldUseFilter() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/videos?title=name")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+  }
+
+  @Test
+  @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  public void shouldReturnAllVideos() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/videos")
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .body("$", hasSize(equalTo(1)));
+  }
+
+  @Test
+  @Sql(scripts = { "/clean.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  public void shouldGivenAnErrorWhenNotFound() {
+    Long id = new Random().nextLong();
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/videos/{id}", id)
+        .then()
+        .statusCode(HttpStatus.NOT_FOUND.value())
+        .body(equalTo("Video Not Found!"));
+  }
+
+  @Test
   @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
   public void shouldAlterAVideo() {
     var videoDTO = VideoHelper.generateVideoDTO(1L);
@@ -152,6 +194,64 @@ public class VideoControllerTest {
         .then()
         .statusCode(HttpStatus.NOT_FOUND.value())
         .body(equalTo("Video Not Found!"));
+  }
+
+  @Test
+  @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  public void shouldPlayVideo() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/videos/play/{id}", 10)
+        .then()
+        .statusCode(HttpStatus.OK.value());
+  }
+
+  @Test
+  @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  public void shouldGiveErrorWhenPlayVideoThatDoesNotExist() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/videos/play/{id}", 1000)
+        .then()
+        .statusCode(HttpStatus.NOT_FOUND.value());
+  }
+
+  @Test
+  @Sql(scripts = { "/clean.sql", "/data.sql" }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+  public void shouldGetRecommendations() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .get("/videos/recommend")
+        .then()
+        .statusCode(HttpStatus.OK.value());
+  }
+
+  @Test
+  public void shouldNotFavoriteVideoWhenIdNotValid() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .post("/videos/favorite/{id}", 100)
+        .then()
+        .statusCode(HttpStatus.NOT_FOUND.value());
+  }
+
+  @Test
+  public void shouldUnfavoriteVideoWhenIdNotValid() {
+    given()
+        .filter(new AllureRestAssured())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .when()
+        .post("/videos/unfavorite/{id}", 100)
+        .then()
+        .statusCode(HttpStatus.NOT_FOUND.value());
   }
 
 }

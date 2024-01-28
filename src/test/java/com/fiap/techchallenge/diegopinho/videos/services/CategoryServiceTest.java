@@ -25,6 +25,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.fiap.techchallenge.diegopinho.videos.controllers.criterias.CategoryCriteria;
 import com.fiap.techchallenge.diegopinho.videos.controllers.dtos.CategoryDTO;
 import com.fiap.techchallenge.diegopinho.videos.entities.Category;
+import com.fiap.techchallenge.diegopinho.videos.exceptions.ConflictException;
 import com.fiap.techchallenge.diegopinho.videos.exceptions.NotFoundException;
 import com.fiap.techchallenge.diegopinho.videos.repositories.CategoryRepository;
 import com.fiap.techchallenge.diegopinho.videos.utils.CategoryHelper;
@@ -54,11 +55,8 @@ public class CategoryServiceTest {
 
     @Test
     public void shouldCreateACategory() {
-      // var mensagem = MensagemHelper.gerarMensagem();
-      // Category category = CategoryHelper.generateCategory();
       CategoryDTO categoryDTO = CategoryHelper.generateCategoryDTO();
-      when(categoryRepository.save(any(Category.class)))
-          .thenAnswer(i -> i.getArgument(0));
+      when(categoryRepository.save(any(Category.class))).thenAnswer(i -> i.getArgument(0));
 
       Category savedCategory = categoryService.create(categoryDTO);
 
@@ -66,6 +64,19 @@ public class CategoryServiceTest {
       assertThat(savedCategory.getName()).isEqualTo(categoryDTO.getName());
       assertThat(savedCategory.getDescription()).isEqualTo(categoryDTO.getDescription());
       verify(categoryRepository, times(1)).save(categoryDTO.toCategory());
+    }
+
+    @Test
+    public void shouldNotCreateDuplicatedCategory() {
+      Category category = CategoryHelper.generateCategory();
+      CategoryDTO categoryDTO = CategoryHelper.generateCategoryDTO();
+      categoryDTO.setName(category.getName());
+      when(categoryRepository.findByName(any(String.class))).thenReturn(Optional.of(category));
+
+      assertThatThrownBy(() -> categoryService.create(categoryDTO))
+          .isInstanceOf(ConflictException.class)
+          .hasMessage("Category already exist.");
+      verify(categoryRepository, never()).save(any(Category.class));
     }
   }
 
@@ -76,8 +87,7 @@ public class CategoryServiceTest {
     public void shouldReturnACategory() {
       Long id = new Random().nextLong();
       Category category = CategoryHelper.generateCategory();
-      when(categoryRepository.findById(any(Long.class)))
-          .thenReturn(Optional.of(category));
+      when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(category));
 
       Category categoryFromDb = categoryService.getById(id);
       verify(categoryRepository, times(1)).findById(id);
@@ -125,8 +135,12 @@ public class CategoryServiceTest {
     public void shouldAlterACategory() {
       Long id = new Random().nextLong();
 
-      Category oldCategory = CategoryHelper.generateCategory();
+      Category oldCategory = new Category();
       oldCategory.setId(id);
+      oldCategory.setName("Name");
+      oldCategory.setDescription("Description");
+
+      oldCategory.toString();
 
       when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(oldCategory));
       when(categoryRepository.save(any(Category.class))).thenAnswer(i -> i.getArgument(0));
