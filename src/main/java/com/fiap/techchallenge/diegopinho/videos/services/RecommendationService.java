@@ -13,13 +13,16 @@ import org.springframework.stereotype.Service;
 import com.fiap.techchallenge.diegopinho.videos.entities.Category;
 import com.fiap.techchallenge.diegopinho.videos.entities.Video;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RecommendationService {
 
   private static int NUMBER_OF_RECOMMENDATIONS = 3;
 
-  @Autowired
-  private VideoService videoService;
+  // @Autowired
+  private final VideoService videoService;
 
   public List<Video> getRecommendationsBasedOnFavorites() {
     List<Video> favoriteVideos = this.videoService.getFavoriteVideos();
@@ -30,7 +33,7 @@ public class RecommendationService {
     return recommendedVideos;
   }
 
-  public Map<Category, Long> countCategoryFrequency(List<Video> favoriteVideos) {
+  private Map<Category, Long> countCategoryFrequency(List<Video> favoriteVideos) {
     Map<Category, Long> categoryFrequency = new HashMap<>();
 
     for (Video video : favoriteVideos) {
@@ -41,7 +44,7 @@ public class RecommendationService {
     return categoryFrequency;
   }
 
-  public List<Category> sortCategoriesByFrequency(Map<Category, Long> categoryFrequency) {
+  private List<Category> sortCategoriesByFrequency(Map<Category, Long> categoryFrequency) {
     List<Category> sortedCategories = categoryFrequency.entrySet()
         .stream()
         .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -51,7 +54,7 @@ public class RecommendationService {
     return sortedCategories;
   }
 
-  public List<Video> recommendVideos(List<Category> sortedCategories, int numberOfVideos) {
+  private List<Video> recommendVideos(List<Category> sortedCategories, int numberOfVideos) {
     List<Video> recommendedVideos = new ArrayList<>();
 
     for (Category category : sortedCategories) {
